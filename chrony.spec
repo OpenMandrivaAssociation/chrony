@@ -14,7 +14,6 @@ Source0:	%{name}-%{version}.%{cvsver}.tar.bz2
 Patch0:		%{name}-1.19-fix.patch.bz2
 Patch1:		%{name}-1.20-fix-chkconfig.patch.bz2
 Buildrequires:	termcap-devel ncurses-devel readline-devel
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires(pre):	rpm-helper
 Conflicts:	ntp openntpd
 
