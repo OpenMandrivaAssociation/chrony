@@ -8,9 +8,10 @@ Group:		System/Configuration/Other
 Source0:	ftp://chrony.sunsite.dk/projects/chrony/%{name}-%{version}.tar.gz
 Patch0:		%{name}-1.19-fix.patch
 Patch1:		%{name}-1.20-fix-chkconfig.patch
-Buildrequires:	termcap-devel
-Buildrequires:	ncurses-devel
-Buildrequires:	readline-devel
+BuildRequires:	termcap-devel
+BuildRequires:	ncurses-devel
+BuildRequires:	readline-devel
+BuildRequires:	texinfo
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires(pre):	rpm-helper
 Conflicts:	ntp
