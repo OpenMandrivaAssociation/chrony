@@ -1,7 +1,7 @@
 Summary:	Chrony clock synchronization program
 Name:		chrony
 Version:	1.23
-Release:	%mkrel 1
+Release:	%mkrel 3
 URL:		http://chrony.sunsite.dk/index.php
 License:	GPLv2
 Group:		System/Configuration/Other
