@@ -1,21 +1,21 @@
 Summary:	Chrony clock synchronization program
 Name:		chrony
 Version:	1.23
-Release:	%mkrel 3
+Release:	%mkrel 5
 URL:		http://chrony.sunsite.dk/index.php
 License:	GPLv2
 Group:		System/Configuration/Other
 Source0:	ftp://chrony.sunsite.dk/projects/chrony/%{name}-%{version}.tar.gz
-Patch0:		%{name}-1.19-fix.patch
+Patch0:		%{name}-1.23-fix.patch
 Patch1:		%{name}-1.20-fix-chkconfig.patch
 BuildRequires:	termcap-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires(pre):	rpm-helper
 Conflicts:	ntp
 Conflicts:	openntpd
+Buildroot:	%{_tmppath}/%{name}-%{version}
 
 %description
 A pair of programs for keeping computer clocks accurate. chronyd is a
