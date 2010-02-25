@@ -1,11 +1,11 @@
 Summary:	Chrony clock synchronization program
 Name:		chrony
-Version:	1.23
-Release:	%mkrel 8
-URL:		http://chrony.sunsite.dk/index.php
+Version:	1.24
+Release:	%mkrel 1
+URL:		http://chrony.tuxfamily.org
 License:	GPLv2
 Group:		System/Configuration/Other
-Source0:	ftp://chrony.sunsite.dk/projects/chrony/%{name}-%{version}.tar.gz
+Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
 Patch0:		%{name}-1.23-fix.patch
 Patch1:		%{name}-1.20-fix-chkconfig.patch
 BuildRequires:	termcap-devel
