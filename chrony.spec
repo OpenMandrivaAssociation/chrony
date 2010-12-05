@@ -1,7 +1,7 @@
 Summary:	Chrony clock synchronization program
 Name:		chrony
 Version:	1.24
-Release:	%mkrel 3
+Release:	%mkrel 4
 URL:		http://chrony.tuxfamily.org
 License:	GPLv2
 Group:		System/Configuration/Other
