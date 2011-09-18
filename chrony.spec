@@ -10,7 +10,7 @@ Version:	%{ver}
 %endif
 Release:        %mkrel 1
 Summary:        An NTP client/server
-Group:          System Environment/Daemons
+Group:          System/Base
 License:        GPLv2
 URL:            http://chrony.tuxfamily.org
 Source0:        http://download.tuxfamily.org/chrony/chrony-%{ver}.tar.gz
