@@ -8,7 +8,7 @@ Version: 	%{ver}.%{gitpatch}
 %else
 Version:	%{ver}
 %endif
-Release:        %mkrel 1
+Release:        %mkrel 2
 Summary:        An NTP client/server
 Group:          System/Base
 License:        GPLv2
@@ -44,46 +44,50 @@ clocks, system real-time clock or manual input as time references.
 %{?gitpatch: echo %{version}-%{gitpatch} > version.txt}
 
 %build
-CFLAGS="$RPM_OPT_FLAGS"
-CFLAGS="$CFLAGS -pie -fpie"
-export CFLAGS
-export LDFLAGS="-Wl,-z,relro,-z,now"
+%if %mdkver >= 201200
+%serverbuild_hardened
+%else
+%serverbuild
+export CFLAGS="$CFLAGS -pie -fpie"
+export LDFLAGS="$LDFLAGS -Wl,-z,relro,-z,now"
+%endif
 
 %configure \
         --docdir=%{_docdir} \
         --with-sendmail=%{_sbindir}/sendmail
-make %{?_smp_mflags} getdate all docs
+
+%make getdate all docs
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
-make install install-docs DESTDIR=$RPM_BUILD_ROOT
+%makeinstall_std install-docs DESTDIR=%{buildroot}
 
-rm -rf $RPM_BUILD_ROOT%{_docdir}
+rm -rf %{buildroot}%{_docdir}
 
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/{sysconfig,logrotate.d}
-mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/{lib,log}/chrony
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/NetworkManager/dispatcher.d
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/dhcp/dhclient.d
-mkdir -p $RPM_BUILD_ROOT/usr/libexec/
-mkdir -p $RPM_BUILD_ROOT/lib/systemd/system
+mkdir -p %{buildroot}%{_sysconfdir}/{sysconfig,logrotate.d}
+mkdir -p %{buildroot}%{_localstatedir}/{lib,log}/chrony
+mkdir -p %{buildroot}%{_sysconfdir}/NetworkManager/dispatcher.d
+mkdir -p %{buildroot}%{_sysconfdir}/dhcp/dhclient.d
+mkdir -p %{buildroot}/usr/libexec/
+mkdir -p %{buildroot}/lib/systemd/system
 
-install -m 644 -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/chrony.conf
-install -m 640 -p %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/chrony.keys
-install -m 644 -p %{SOURCE3} $RPM_BUILD_ROOT/lib/systemd/system/chronyd.service
-install -m 755 -p %{SOURCE4} $RPM_BUILD_ROOT/usr/libexec/chrony-helper
-install -m 644 -p %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/chrony
+install -m 644 -p %{SOURCE1} %{buildroot}%{_sysconfdir}/chrony.conf
+install -m 640 -p %{SOURCE2} %{buildroot}%{_sysconfdir}/chrony.keys
+install -m 644 -p %{SOURCE3} %{buildroot}/lib/systemd/system/chronyd.service
+install -m 755 -p %{SOURCE4} %{buildroot}/usr/libexec/chrony-helper
+install -m 644 -p %{SOURCE5} %{buildroot}%{_sysconfdir}/logrotate.d/chrony
 install -m 755 -p %{SOURCE7} \
-        $RPM_BUILD_ROOT%{_sysconfdir}/NetworkManager/dispatcher.d/20-chrony
+        %{buildroot}%{_sysconfdir}/NetworkManager/dispatcher.d/20-chrony
 install -m 755 -p %{SOURCE8} \
-        $RPM_BUILD_ROOT%{_sysconfdir}/dhcp/dhclient.d/chrony.sh
+        %{buildroot}%{_sysconfdir}/dhcp/dhclient.d/chrony.sh
 install -m 644 -p %{SOURCE9} \
-        $RPM_BUILD_ROOT/lib/systemd/system/chrony-wait.service
+        %{buildroot}/lib/systemd/system/chrony-wait.service
 
-touch $RPM_BUILD_ROOT%{_localstatedir}/lib/chrony/{drift,rtc}
+touch %{buildroot}%{_localstatedir}/lib/chrony/{drift,rtc}
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %pre
 getent group chrony > /dev/null || /usr/sbin/groupadd -r chrony
@@ -120,7 +124,7 @@ fi
 :
 
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,root)
 %doc COPYING NEWS README chrony.txt faq.txt examples/*
 %config(noreplace) %{_sysconfdir}/chrony.conf
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,chrony) %{_sysconfdir}/chrony.keys
