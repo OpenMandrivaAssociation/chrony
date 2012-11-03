@@ -1,34 +1,36 @@
-%define gitpatch 20110831gitb088b7
+%define gitpatch git1ca844a
 %define git 1
-%define ver 1.26
+%define prel pre1
 
-Name:           chrony
+Name:		chrony
+Version:	1.27
 %if %git
-Version: 	%{ver}.%{gitpatch}
+Release:	0.%{?prel}%{?gitpatch}.1
 %else
-Version:	%{ver}
+Release:	1
 %endif
-Release:        %mkrel 2
-Summary:        An NTP client/server
-Group:          System/Base
-License:        GPLv2
-URL:            http://chrony.tuxfamily.org
-Source0:        http://download.tuxfamily.org/chrony/chrony-%{ver}.tar.gz
-Source1:        chrony.conf
-Source2:        chrony.keys
-Source3:        chronyd.service
-Source4:        chrony.helper
-Source5:        chrony.logrotate
-Source7:        chrony.nm-dispatcher
-Source8:        chrony.dhclient
-Source9:        chrony-wait.service
-%{?gitpatch:Patch0: chrony-%{ver}-%{gitpatch}.patch.gz}
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  libcap-devel libedit-devel bison texinfo
-Requires(pre):  shadow-utils
-Requires(post): systemd-units info chkconfig
-Requires(preun): systemd-units info
-Requires(postun): systemd-units
+Summary:	An NTP client/server
+Group:		System/Base
+License:	GPLv2
+URL:		http://chrony.tuxfamily.org
+Source0:	http://download.tuxfamily.org/chrony/chrony-%{version}-%{?prel}.tar.gz
+Source1:	chrony.conf
+Source2:	chrony.keys
+Source3:	chronyd.service
+Source4:	chrony.helper
+Source5:	chrony.logrotate
+Source7:	chrony.nm-dispatcher
+Source8:	chrony.dhclient
+Source9:	chrony-wait.service
+%{?gitpatch:Patch0: chrony-%{version}-%{?prel}%{gitpatch}.patch.gz}
+BuildRequires:	libcap-devel
+BuildRequires:	libedit-devel
+BuildRequires:	bison
+BuildRequires:	texinfo
+Requires(pre):	shadow-utils
+Requires(post):	systemd-units info chkconfig
+Requires(preun):	systemd-units info
+Requires(postun):	systemd-units
 
 %description
 A client/server for the Network Time Protocol, this program keeps your
@@ -38,7 +40,7 @@ in permanently connected environments. It can use also hardware reference
 clocks, system real-time clock or manual input as time references.
 
 %prep
-%setup -q -n %{name}-%{ver}%{?prerelease}
+%setup -q -n %{name}-%{version}-%{?prel}
 %{?gitpatch:%patch0 -p1}
 
 %{?gitpatch: echo %{version}-%{gitpatch} > version.txt}
@@ -59,8 +61,6 @@ export LDFLAGS="$LDFLAGS -Wl,-z,relro,-z,now"
 %make getdate all docs
 
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std install-docs DESTDIR=%{buildroot}
 
 rm -rf %{buildroot}%{_docdir}
@@ -77,27 +77,19 @@ install -m 640 -p %{SOURCE2} %{buildroot}%{_sysconfdir}/chrony.keys
 install -m 644 -p %{SOURCE3} %{buildroot}/lib/systemd/system/chronyd.service
 install -m 755 -p %{SOURCE4} %{buildroot}/usr/libexec/chrony-helper
 install -m 644 -p %{SOURCE5} %{buildroot}%{_sysconfdir}/logrotate.d/chrony
-install -m 755 -p %{SOURCE7} \
-        %{buildroot}%{_sysconfdir}/NetworkManager/dispatcher.d/20-chrony
-install -m 755 -p %{SOURCE8} \
-        %{buildroot}%{_sysconfdir}/dhcp/dhclient.d/chrony.sh
-install -m 644 -p %{SOURCE9} \
-        %{buildroot}/lib/systemd/system/chrony-wait.service
+install -m 755 -p %{SOURCE7} %{buildroot}%{_sysconfdir}/NetworkManager/dispatcher.d/20-chrony
+install -m 755 -p %{SOURCE8} %{buildroot}%{_sysconfdir}/dhcp/dhclient.d/chrony.sh
+install -m 644 -p %{SOURCE9} %{buildroot}/lib/systemd/system/chrony-wait.service
 
 touch %{buildroot}%{_localstatedir}/lib/chrony/{drift,rtc}
 
-%clean
-rm -rf %{buildroot}
-
 %pre
 getent group chrony > /dev/null || /usr/sbin/groupadd -r chrony
-getent passwd chrony > /dev/null || /usr/sbin/useradd -r -g chrony \
-       -d %{_localstatedir}/lib/chrony -s /sbin/nologin chrony
+getent passwd chrony > /dev/null || /usr/sbin/useradd -r -g chrony -d %{_localstatedir}/lib/chrony -s /sbin/nologin chrony
 :
 
 %post
 /bin/systemctl daemon-reload &> /dev/null
-/sbin/install-info %{_infodir}/chrony.info.gz %{_infodir}/dir &> /dev/null
 :
 
 %triggerun -- chrony < 1.25
@@ -108,11 +100,8 @@ fi
 
 %preun
 if [ "$1" -eq 0 ]; then
-        /bin/systemctl --no-reload disable \
-                chrony-wait.service chronyd.service &> /dev/null
+        /bin/systemctl --no-reload disable chrony-wait.service chronyd.service &> /dev/null
         /bin/systemctl stop chrony-wait.service chronyd.service &> /dev/null
-        /sbin/install-info --delete %{_infodir}/chrony.info.gz \
-                %{_infodir}/dir &> /dev/null
 fi
 :
 
@@ -124,7 +113,6 @@ fi
 :
 
 %files
-%defattr(-,root,root)
 %doc COPYING NEWS README chrony.txt faq.txt examples/*
 %config(noreplace) %{_sysconfdir}/chrony.conf
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,chrony) %{_sysconfdir}/chrony.keys
