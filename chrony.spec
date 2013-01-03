@@ -131,6 +131,9 @@ fi
 %dir %attr(-,chrony,chrony) %{_localstatedir}/log/chrony
 
 %changelog
+* Thu Jan  3 2013 Per Øyvind Karlsen <peroyvind@mandriva.org> 1.27-0.pre1git1ca844a.2
+- drop dependency on 'info'
+
 * Sat Nov 03 2012 Tomasz Pawel Gajc <tpg@mandriva.org> 1.27-0.pre1git1ca844a.1
 + Revision: 821779
 - update to new version 1.27-pre1
