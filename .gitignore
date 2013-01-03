@@ -1,9 +1,1 @@
 chrony-1.27-pre1.tar.gz
-chrony.conf
-chrony.dhclient
-chronyd.service
-chrony.helper
-chrony.keys
-chrony.logrotate
-chrony.nm-dispatcher
-chrony-wait.service

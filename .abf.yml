@@ -1,10 +1,3 @@
 sources:
-  "chrony-1.27-pre1.tar.gz:"	2cd00352b43adab61111d9cd78ffa4d27e7d14e8
-  "chrony.conf:"	a93a5edff039598539a14837f44ac275253a85bd
-  "chrony.dhclient:"	ce318f847579e3200313a93056a091f058fdcda1
-  "chronyd.service:"	ee5299fa6b1ffbe27dce1c19053d99c5d0fbccd4
-  "chrony.helper:"	5bb14214d3ffd1bbc74263f238ba2071b57a4c4f
-  "chrony.keys:"	13b53d5f8ecd5cf9ba8903ce4fd9952e92199670
-  "chrony.logrotate:"	8116fc16a7e276c1eaf95a92ef5482ba59e3c983
-  "chrony.nm-dispatcher:"	c467745551155309a0274839549a09ee6ee879c8
-  "chrony-wait.service:"	f525ad4ee18e33fab92c1501f8b6f676cb849aa4
+  chrony-1.27-pre1git1ca844a.patch.gz: eeeeaf2a6739d6da0dd03dd9417111577bb9065e
+  chrony-1.27-pre1.tar.gz: 2cd00352b43adab61111d9cd78ffa4d27e7d14e8
