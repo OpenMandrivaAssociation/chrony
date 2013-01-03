@@ -5,7 +5,7 @@
 Name:		chrony
 Version:	1.27
 %if %git
-Release:	0.%{?prel}%{?gitpatch}.1
+Release:	0.%{?prel}%{?gitpatch}.2
 %else
 Release:	1
 %endif
@@ -28,8 +28,8 @@ BuildRequires:	libedit-devel
 BuildRequires:	bison
 BuildRequires:	texinfo
 Requires(pre):	shadow-utils
-Requires(post):	systemd-units info chkconfig
-Requires(preun):	systemd-units info
+Requires(post):	systemd-units chkconfig
+Requires(preun):	systemd-units
 Requires(postun):	systemd-units
 
 %description
