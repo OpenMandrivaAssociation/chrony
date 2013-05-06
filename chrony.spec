@@ -50,7 +50,7 @@ export LDFLAGS="$LDFLAGS -Wl,-z,relro,-z,now"
 %make getdate all docs
 
 %install
-%makeinstall_std install-docs DESTDIR=%{buildroot}
+%makeinstall_std install-docs
 
 rm -rf %{buildroot}%{_docdir}
 
