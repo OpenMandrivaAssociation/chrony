@@ -92,7 +92,7 @@ case "$1" in
         # rather anal and relying on /var/run to be mounted as tmpfs (which
         # we've yet to do), chronyd won't start during boot if left around
         # from unclean shutdown...
-        if [ -e /var/run/chronyd.pid ];
+        if [ -e /var/run/chronyd.pid ]; then
             is-running || /var/run/chronyd.pid
         fi
         generate_commandkey
