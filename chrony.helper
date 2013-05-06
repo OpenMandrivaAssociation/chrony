@@ -38,7 +38,7 @@ generate_commandkey() {
     commandkey=$(get_key $commandkeyid)
     [ -z "$commandkey" ] || return 0
 
-    password=$(tr -c -d '0-9A-F' < /dev/urandom | head -c 40)
+    password=$(tr -c -d '0-9A-F' < /dev/urandom 2> /dev/null | head -c 40)
     [ ${#password} -eq 40 ] &&
         echo "$commandkeyid SHA1 HEX:$password" >> $keyfile
 }

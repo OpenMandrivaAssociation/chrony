@@ -1,11 +1,11 @@
 [Unit]
 Description=NTP client/server
-After=syslog.target ntpdate.service
+After=syslog.target ntpdate.service sntp.service
+Wants=chrony-wait.service
 Conflicts=ntpd.service
 
 [Service]
 Type=forking
-PIDFile=/var/run/chronyd.pid
 EnvironmentFile=-/etc/sysconfig/chronyd
 ExecStartPre=/usr/libexec/chrony-helper generate-commandkey
 ExecStart=/usr/sbin/chronyd -u chrony $OPTIONS
