@@ -1,19 +1,11 @@
-%define gitpatch git1ca844a
-%define git 1
-%define prel pre1
-
 Name:		chrony
 Version:	1.27
-%if %git
-Release:	0.%{?prel}%{?gitpatch}.2
-%else
 Release:	1
-%endif
 Summary:	An NTP client/server
 Group:		System/Base
 License:	GPLv2
 URL:		http://chrony.tuxfamily.org
-Source0:	http://download.tuxfamily.org/chrony/chrony-%{version}-%{?prel}.tar.gz
+Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
 Source1:	chrony.conf
 Source2:	chrony.keys
 Source3:	chronyd.service
@@ -40,10 +32,7 @@ in permanently connected environments. It can use also hardware reference
 clocks, system real-time clock or manual input as time references.
 
 %prep
-%setup -q -n %{name}-%{version}-%{?prel}
-%{?gitpatch:%patch0 -p1}
-
-%{?gitpatch: echo %{version}-%{gitpatch} > version.txt}
+%setup -q
 
 %build
 %if %mdkver >= 201200
