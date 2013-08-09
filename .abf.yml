@@ -1,3 +1,4 @@
 sources:
-  chrony-1.27-pre1git1ca844a.patch.gz: eeeeaf2a6739d6da0dd03dd9417111577bb9065e
   chrony-1.27-pre1.tar.gz: 2cd00352b43adab61111d9cd78ffa4d27e7d14e8
+  chrony-1.27-pre1git1ca844a.patch.gz: eeeeaf2a6739d6da0dd03dd9417111577bb9065e
+  chrony-1.29.tar.gz: 442fb7d62a6f23bf1057864a3dbdfa55e1b6eb35

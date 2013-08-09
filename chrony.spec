@@ -1,19 +1,15 @@
 %define gitpatch git1ca844a
-%define git 1
+%define git 0
 %define prel pre1
 
 Name:		chrony
-Version:	1.27
-%if %git
-Release:	0.%{?prel}%{?gitpatch}.2
-%else
+Version:	1.29
 Release:	1
-%endif
 Summary:	An NTP client/server
 Group:		System/Base
 License:	GPLv2
 URL:		http://chrony.tuxfamily.org
-Source0:	http://download.tuxfamily.org/chrony/chrony-%{version}-%{?prel}.tar.gz
+Source0:	http://download.tuxfamily.org/chrony/chrony-%{version}.tar.gz
 Source1:	chrony.conf
 Source2:	chrony.keys
 Source3:	chronyd.service
@@ -22,7 +18,6 @@ Source5:	chrony.logrotate
 Source7:	chrony.nm-dispatcher
 Source8:	chrony.dhclient
 Source9:	chrony-wait.service
-%{?gitpatch:Patch0: chrony-%{version}-%{?prel}%{gitpatch}.patch.gz}
 BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	bison
@@ -40,19 +35,13 @@ in permanently connected environments. It can use also hardware reference
 clocks, system real-time clock or manual input as time references.
 
 %prep
-%setup -q -n %{name}-%{version}-%{?prel}
-%{?gitpatch:%patch0 -p1}
-
-%{?gitpatch: echo %{version}-%{gitpatch} > version.txt}
+%setup -q
+%apply_patches
 
 %build
-%if %mdkver >= 201200
-%serverbuild_hardened
-%else
 %serverbuild
 export CFLAGS="$CFLAGS -pie -fpie"
 export LDFLAGS="$LDFLAGS -Wl,-z,relro,-z,now"
-%endif
 
 %configure \
         --docdir=%{_docdir} \
