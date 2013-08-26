@@ -1,5 +1,5 @@
 Name:		chrony
-Version:	1.27
+Version:	1.29
 Release:	1
 Summary:	An NTP client/server
 Group:		System/Base
@@ -14,7 +14,6 @@ Source5:	chrony.logrotate
 Source7:	chrony.nm-dispatcher
 Source8:	chrony.dhclient
 Source9:	chrony-wait.service
-%{?gitpatch:Patch0: chrony-%{version}-%{?prel}%{gitpatch}.patch.gz}
 BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	bison
@@ -33,15 +32,15 @@ clocks, system real-time clock or manual input as time references.
 
 %prep
 %setup -q
+<<<<<<< HEAD
+=======
+%apply_patches
+>>>>>>> c37f8ac169d6e92701cc2ad77f7bfcf24b85f65c
 
 %build
-%if %mdkver >= 201200
-%serverbuild_hardened
-%else
 %serverbuild
 export CFLAGS="$CFLAGS -pie -fpie"
 export LDFLAGS="$LDFLAGS -Wl,-z,relro,-z,now"
-%endif
 
 %configure \
         --docdir=%{_docdir} \
