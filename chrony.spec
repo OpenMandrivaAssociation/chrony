@@ -1,6 +1,6 @@
 Name:		chrony
 Version:	1.29
-Release:	1
+Release:	2
 Summary:	An NTP client/server
 Group:		System/Base
 License:	GPLv2
