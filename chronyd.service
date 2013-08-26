@@ -1,7 +1,6 @@
 [Unit]
 Description=NTP client/server
 After=syslog.target ntpdate.service sntp.service
-Wants=chrony-wait.service
 Conflicts=ntpd.service
 
 [Service]
