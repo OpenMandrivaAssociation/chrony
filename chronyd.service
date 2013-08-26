@@ -1,6 +1,6 @@
 [Unit]
 Description=NTP client/server
-After=syslog.target ntpdate.service sntp.service
+After=ntpdate.service sntp.service
 Conflicts=ntpd.service
 
 [Service]
