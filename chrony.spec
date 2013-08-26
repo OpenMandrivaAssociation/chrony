@@ -32,10 +32,6 @@ clocks, system real-time clock or manual input as time references.
 
 %prep
 %setup -q
-<<<<<<< HEAD
-=======
-%apply_patches
->>>>>>> c37f8ac169d6e92701cc2ad77f7bfcf24b85f65c
 
 %build
 %serverbuild
