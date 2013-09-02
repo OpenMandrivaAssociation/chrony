@@ -93,7 +93,7 @@ case "$1" in
         # we've yet to do), chronyd won't start during boot if left around
         # from unclean shutdown...
         if [ -e /var/run/chronyd.pid ]; then
-            is-running || rm -f /var/run/chronyd.pid
+            is_running || rm -f /var/run/chronyd.pid
         fi
         generate_commandkey
         ;;
