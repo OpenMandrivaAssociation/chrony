@@ -1,19 +1,11 @@
-%define gitpatch git1ca844a
-%define git 1
-%define prel pre1
-
 Name:		chrony
-Version:	1.27
-%if %git
-Release:	0.%{?prel}%{?gitpatch}.2
-%else
-Release:	1
-%endif
+Version:	1.29
+Release:	2
 Summary:	An NTP client/server
 Group:		System/Base
 License:	GPLv2
 URL:		http://chrony.tuxfamily.org
-Source0:	http://download.tuxfamily.org/chrony/chrony-%{version}-%{?prel}.tar.gz
+Source0:	http://download.tuxfamily.org/chrony/chrony-%{version}.tar.gz
 Source1:	chrony.conf
 Source2:	chrony.keys
 Source3:	chronyd.service
@@ -22,15 +14,15 @@ Source5:	chrony.logrotate
 Source7:	chrony.nm-dispatcher
 Source8:	chrony.dhclient
 Source9:	chrony-wait.service
-%{?gitpatch:Patch0: chrony-%{version}-%{?prel}%{gitpatch}.patch.gz}
 BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	bison
 BuildRequires:	texinfo
 Requires(pre):	shadow-utils
-Requires(post):	systemd-units chkconfig
-Requires(preun):	systemd-units
-Requires(postun):	systemd-units
+Requires(pre):	rpm-helper
+Requires(post):	rpm-helper
+Requires(postun):	rpm-helper
+Requires(preun):	rpm-helper
 
 %description
 A client/server for the Network Time Protocol, this program keeps your
@@ -40,19 +32,13 @@ in permanently connected environments. It can use also hardware reference
 clocks, system real-time clock or manual input as time references.
 
 %prep
-%setup -q -n %{name}-%{version}-%{?prel}
-%{?gitpatch:%patch0 -p1}
-
-%{?gitpatch: echo %{version}-%{gitpatch} > version.txt}
+%setup -q
+%apply_patches
 
 %build
-%if %mdkver >= 201200
-%serverbuild_hardened
-%else
 %serverbuild
 export CFLAGS="$CFLAGS -pie -fpie"
 export LDFLAGS="$LDFLAGS -Wl,-z,relro,-z,now"
-%endif
 
 %configure \
         --docdir=%{_docdir} \
@@ -70,7 +56,8 @@ mkdir -p %{buildroot}%{_localstatedir}/{lib,log}/chrony
 mkdir -p %{buildroot}%{_sysconfdir}/NetworkManager/dispatcher.d
 mkdir -p %{buildroot}%{_sysconfdir}/dhcp/dhclient.d
 mkdir -p %{buildroot}/usr/libexec/
-mkdir -p %{buildroot}/lib/systemd/system
+mkdir -p %{buildroot}%{_unitdir}
+mkdir -p %{buildroot}/lib/systemd/ntp-units.d
 
 install -m 644 -p %{SOURCE1} %{buildroot}%{_sysconfdir}/chrony.conf
 install -m 640 -p %{SOURCE2} %{buildroot}%{_sysconfdir}/chrony.keys
@@ -82,33 +69,23 @@ install -m 755 -p %{SOURCE8} %{buildroot}%{_sysconfdir}/dhcp/dhclient.d/chrony.s
 install -m 644 -p %{SOURCE9} %{buildroot}/lib/systemd/system/chrony-wait.service
 
 touch %{buildroot}%{_localstatedir}/lib/chrony/{drift,rtc}
+echo 'chronyd.service' > %{buildroot}/lib/systemd/ntp-units.d/50-chronyd.list
 
 %pre
-getent group chrony > /dev/null || /usr/sbin/groupadd -r chrony
-getent passwd chrony > /dev/null || /usr/sbin/useradd -r -g chrony -d %{_localstatedir}/lib/chrony -s /sbin/nologin chrony
-:
+%_pre_useradd %{name} %{_localstatedir}/lib/%{name} /sbin/nologin
 
 %post
-/bin/systemctl daemon-reload &> /dev/null
-:
+%_post_service chronyd
+
+%preun
+%_preun_service chronyd
+
+%postun
+%_postun_userdel %{name}
 
 %triggerun -- chrony < 1.25
 if /sbin/chkconfig --level 3 chronyd; then
         /bin/systemctl enable chronyd.service &> /dev/null
-fi
-:
-
-%preun
-if [ "$1" -eq 0 ]; then
-        /bin/systemctl --no-reload disable chrony-wait.service chronyd.service &> /dev/null
-        /bin/systemctl stop chrony-wait.service chronyd.service &> /dev/null
-fi
-:
-
-%postun
-/bin/systemctl daemon-reload &> /dev/null
-if [ "$1" -ge 1 ]; then
-        /bin/systemctl try-restart chronyd.service &> /dev/null
 fi
 :
 
@@ -123,7 +100,8 @@ fi
 %{_sbindir}/chronyd
 /usr/libexec/chrony-helper
 %{_infodir}/chrony.info*
-/lib/systemd/system/chrony*.service
+/lib/systemd/ntp-units.d/*.list
+%{_unitdir}/chrony*.service
 %{_mandir}/man[158]/%{name}*.[158]*
 %dir %attr(-,chrony,chrony) %{_localstatedir}/lib/chrony
 %ghost %attr(-,chrony,chrony) %{_localstatedir}/lib/chrony/drift
