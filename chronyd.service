@@ -1,6 +1,6 @@
 [Unit]
 Description=NTP client/server
-After=ntpdate.service sntp.service
+After=ntpdate.service sntp.service ntpd.service
 Conflicts=ntpd.service
 
 [Service]
