@@ -5,6 +5,7 @@ Conflicts=ntpd.service
 
 [Service]
 Type=forking
+PIDFile=/var/run/chronyd.pid
 EnvironmentFile=-/etc/sysconfig/chronyd
 ExecStartPre=/usr/libexec/chrony-helper generate-commandkey
 ExecStart=/usr/sbin/chronyd -u chrony $OPTIONS

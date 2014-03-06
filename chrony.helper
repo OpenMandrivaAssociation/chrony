@@ -88,13 +88,6 @@ is_running() {
 
 case "$1" in
     generate-commandkey)
-        # not really the right place to do it, but as systemd/chronyd is
-        # rather anal and relying on /var/run to be mounted as tmpfs (which
-        # we've yet to do), chronyd won't start during boot if left around
-        # from unclean shutdown...
-        if [ -e /var/run/chronyd.pid ]; then
-            is_running || rm -f /var/run/chronyd.pid
-        fi
         generate_commandkey
         ;;
     add-dhclient-servers)
