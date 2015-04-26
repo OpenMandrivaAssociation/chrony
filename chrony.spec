@@ -89,7 +89,7 @@ fi
 :
 
 %files
-%doc COPYING NEWS README chrony.txt faq.txt examples/*
+%doc COPYING NEWS README chrony.txt examples/*
 %config(noreplace) %{_sysconfdir}/chrony.conf
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,chrony) %{_sysconfdir}/chrony.keys
 %config(noreplace) %{_sysconfdir}/logrotate.d/chrony
