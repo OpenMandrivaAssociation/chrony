@@ -1,6 +1,6 @@
 Name:		chrony
-Version:	1.31.1
-Release:	2
+Version:	2.4
+Release:	1
 Summary:	An NTP client/server
 Group:		System/Base
 License:	GPLv2
@@ -89,7 +89,7 @@ fi
 :
 
 %files
-%doc COPYING NEWS README chrony.txt examples/*
+%doc COPYING NEWS README examples/*
 %config(noreplace) %{_sysconfdir}/chrony.conf
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,chrony) %{_sysconfdir}/chrony.keys
 %config(noreplace) %{_sysconfdir}/logrotate.d/chrony
@@ -98,7 +98,6 @@ fi
 %{_bindir}/chronyc
 %{_sbindir}/chronyd
 /usr/libexec/chrony-helper
-%{_infodir}/chrony.info*
 /lib/systemd/ntp-units.d/*.list
 %{_unitdir}/chrony*.service
 %{_mandir}/man[158]/%{name}*.[158]*
