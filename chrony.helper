@@ -1,46 +1,12 @@
 #!/bin/bash
 
-config=/etc/chrony.conf
-keyfile=/etc/chrony.keys
 chronyc=/usr/bin/chronyc
 dhclient_servers=/var/lib/dhclient/chrony.servers.*
 dhclient_added_servers=/var/lib/dhclient/chrony.added_servers
 service_name=chronyd.service
 
-get_key() {
-    awk '/^[ \t]*'$1'\>/ { if ($3 == "") print "MD5", $2;
-         else print $2, $3; exit }' < $keyfile
-}
-
-get_commandkeyid() {
-    awk '/^[ \t]*commandkey\>/ { keyid=$2 } END { print keyid }' < $config
-}
-
 chrony_command() {
-    commandkeyid=$(get_commandkeyid)
-    [ -z "$commandkeyid" ] && return 1
-    commandkey=$(get_key $commandkeyid)
-    [ -z "$commandkey" ] && return 2
-
-    authhash=${commandkey% *}
-    password=${commandkey#* }
-
-    $chronyc <<EOF
-authhash $authhash
-password $password
-$1
-EOF
-}
-
-generate_commandkey() {
-    commandkeyid=$(get_commandkeyid)
-    [ -z "$commandkeyid" ] && return 1
-    commandkey=$(get_key $commandkeyid)
-    [ -z "$commandkey" ] || return 0
-
-    password=$(tr -c -d '0-9A-F' < /dev/urandom | head -c 40)
-    [ ${#password} -eq 40 ] &&
-        echo "$commandkeyid SHA1 HEX:$password" >> $keyfile
+    $chronyc -a -m "$1"
 }
 
 update_dhclient_added_servers() {
@@ -87,9 +53,6 @@ is_running() {
 }
 
 case "$1" in
-    generate-commandkey)
-        generate_commandkey
-        ;;
     add-dhclient-servers)
         add_dhclient_servers
         ;;
@@ -106,7 +69,7 @@ case "$1" in
         chrony_command "$2"
         ;;
     *)
-        echo $"Usage: $0 {generate-commandkey|add-dhclient-servers|remove-dhclient-servers|is-running|command|forced-command}"
+        echo $"Usage: $0 {add-dhclient-servers|remove-dhclient-servers|is-running|command|forced-command}"
         exit 2
 esac
 exit $?

@@ -1,11 +1,11 @@
 Name:		chrony
-Version:	1.29
-Release:	3.1
+Version:	1.31.2
+Release:	1
 Summary:	An NTP client/server
 Group:		System/Base
 License:	GPLv2
 URL:		http://chrony.tuxfamily.org
-Source0:	http://download.tuxfamily.org/chrony/chrony-%{version}.tar.gz
+Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
 Source1:	chrony.conf
 Source2:	chrony.keys
 Source3:	chronyd.service
@@ -33,7 +33,6 @@ clocks, system real-time clock or manual input as time references.
 
 %prep
 %setup -q
-%apply_patches
 
 %build
 %serverbuild
@@ -47,7 +46,7 @@ export LDFLAGS="$LDFLAGS -Wl,-z,relro,-z,now"
 %make getdate all docs
 
 %install
-%makeinstall_std install-docs DESTDIR=%{buildroot}
+%makeinstall_std install-docs
 
 rm -rf %{buildroot}%{_docdir}
 
@@ -90,7 +89,7 @@ fi
 :
 
 %files
-%doc COPYING NEWS README chrony.txt faq.txt examples/*
+%doc COPYING NEWS README chrony.txt examples/*
 %config(noreplace) %{_sysconfdir}/chrony.conf
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,chrony) %{_sysconfdir}/chrony.keys
 %config(noreplace) %{_sysconfdir}/logrotate.d/chrony
