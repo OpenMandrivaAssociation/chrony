@@ -1,5 +1,5 @@
 Name:		chrony
-Version:	2.4
+Version:	3.4
 Release:	1
 Summary:	An NTP client/server
 Group:		System/Base
