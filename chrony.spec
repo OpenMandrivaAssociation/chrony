@@ -18,6 +18,7 @@ BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	bison
 BuildRequires:	texinfo
+BuildRequires:  rpm-helper
 Requires(pre):	shadow-utils
 Requires(pre):	rpm-helper
 Requires(post):	rpm-helper
@@ -72,15 +73,6 @@ echo 'chronyd.service' > %{buildroot}/lib/systemd/ntp-units.d/50-chronyd.list
 
 %pre
 %_pre_useradd %{name} %{_localstatedir}/lib/%{name} /sbin/nologin
-
-%post
-%systemd_post chronyd.service
-
-%preun
-%systemd_preun chronyd.service
-
-%postun
-%systemd_postun_with_restart chronyd.service
 
 %triggerun -- chrony < 1.25
 if /sbin/chkconfig --level 3 chronyd; then
