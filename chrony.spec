@@ -1,5 +1,7 @@
+%define _empty_manifest_terminate_build 0
+
 Name:		chrony
-Version:	3.5
+Version:	4.2
 Release:	1
 Summary:	An NTP client/server
 Group:		System/Base
@@ -44,10 +46,10 @@ export LDFLAGS="$LDFLAGS -Wl,-z,relro,-z,now"
         --docdir=%{_docdir} \
         --with-sendmail=%{_sbindir}/sendmail
 
-%make getdate all docs
+%make_build getdate all docs
 
 %install
-%makeinstall_std install-docs
+%make_install install-docs
 
 rm -rf %{buildroot}%{_docdir}
 
@@ -97,4 +99,3 @@ fi
 %ghost %attr(-,chrony,chrony) %{_localstatedir}/lib/chrony/drift
 %ghost %attr(-,chrony,chrony) %{_localstatedir}/lib/chrony/rtc
 %dir %attr(-,chrony,chrony) %{_localstatedir}/log/chrony
-
