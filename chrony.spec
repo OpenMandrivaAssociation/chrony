@@ -17,8 +17,8 @@ Source5:	chrony.logrotate
 Source7:	chrony.nm-dispatcher
 Source8:	chrony.dhclient
 Source9:	chrony-wait.service
-BuildRequires:	libcap-devel
-BuildRequires:	libedit-devel
+BuildRequires:	pkgconfig(libcap)
+BuildRequires:	pkgconfig(libedit)
 BuildRequires:	bison
 BuildRequires:	texinfo
 BuildRequires:  rpm-helper
