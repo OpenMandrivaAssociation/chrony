@@ -21,12 +21,6 @@ BuildRequires:	pkgconfig(libcap)
 BuildRequires:	pkgconfig(libedit)
 BuildRequires:	bison
 BuildRequires:	texinfo
-BuildRequires:  rpm-helper
-Requires(pre):	shadow-utils
-Requires(pre):	rpm-helper
-Requires(post):	rpm-helper
-Requires(postun):	rpm-helper
-Requires(preun):	rpm-helper
 
 %description
 A client/server for the Network Time Protocol, this program keeps your
@@ -74,20 +68,17 @@ install -m 644 -p %{SOURCE9} %{buildroot}%{_unitdir}/chrony-wait.service
 touch %{buildroot}%{_localstatedir}/lib/chrony/{drift,rtc}
 echo 'chronyd.service' > %{buildroot}%{_unitdir}/ntp-units.d/50-chronyd.list
 
-%pre
-%_pre_useradd %{name} %{_localstatedir}/lib/%{name} /sbin/nologin
-
-%triggerun -- chrony < 1.25
-if /sbin/chkconfig --level 3 chronyd; then
-        /bin/systemctl enable chronyd.service &> /dev/null
-fi
-:
+mkdir -p %{buildroot}%{_sysusersdir}
+cat >%{buildroot}%{_sysusersdir}/%{name}.conf <<'EOF'
+u %{name} - "Chrony NTP" %{_localstatedir}/lib/%{name} /sbin/nologin
+EOF
 
 %files
 %doc COPYING NEWS README examples/*
 %config(noreplace) %{_sysconfdir}/chrony.conf
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,chrony) %{_sysconfdir}/chrony.keys
 %config(noreplace) %{_sysconfdir}/logrotate.d/chrony
+%{_sysusersdir}/%{name}.conf
 %{_sysconfdir}/NetworkManager/dispatcher.d/20-chrony
 %{_sysconfdir}/dhcp/dhclient.d/chrony.sh
 %{_bindir}/chronyc
