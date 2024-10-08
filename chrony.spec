@@ -2,13 +2,13 @@
 %undefine _debugsource_packages
 
 Name:		chrony
-Version:	4.5
+Version:	4.6.1
 Release:	1
 Summary:	An NTP client/server
 Group:		System/Base
 License:	GPLv2
-URL:		http://chrony.tuxfamily.org
-Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
+URL:		http://chrony-project.org/
+Source0:	http://chrony-project.org/releases/%{name}-%{version}.tar.gz
 Source1:	chrony.conf
 Source2:	chrony.keys
 Source3:	chronyd.service
