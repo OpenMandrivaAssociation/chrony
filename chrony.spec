@@ -7,7 +7,7 @@ Release:	1
 Summary:	An NTP client/server
 Group:		System/Base
 License:	GPLv2
-URL:		http://chrony-project.org/
+URL:		https://chrony-project.org/
 Source0:	http://chrony-project.org/releases/%{name}-%{version}.tar.gz
 Source1:	chrony.conf
 Source2:	chrony.keys
