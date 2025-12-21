@@ -17,6 +17,11 @@ Source5:	chrony.logrotate
 Source7:	chrony.nm-dispatcher
 Source8:	chrony.dhclient
 Source9:	chrony-wait.service
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	pkgconfig(libcap)
 BuildRequires:	pkgconfig(libedit)
 BuildRequires:	bison
