@@ -2,7 +2,7 @@
 %undefine _debugsource_packages
 
 Name:		chrony
-Version:	4.6.1
+Version:	4.8
 Release:	1
 Summary:	An NTP client/server
 Group:		System/Base
